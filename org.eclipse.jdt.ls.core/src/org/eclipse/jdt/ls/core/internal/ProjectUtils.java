@@ -45,6 +45,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ls.core.internal.managers.BuildSupportManager;
 import org.eclipse.jdt.ls.core.internal.managers.ProjectsManager;
 import org.eclipse.jdt.ls.core.internal.preferences.PreferenceManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
@@ -86,7 +87,7 @@ public final class ProjectUtils {
 	}
 
 	public static boolean isGeneralJavaProject(IProject project) {
-		return isJavaProject(project) && !isMavenProject(project) && !isGradleProject(project);
+		return isJavaProject(project) && BuildSupportManager.instance().find(project).isPresent();
 	}
 
 	public static String getJavaSourceLevel(IProject project) {

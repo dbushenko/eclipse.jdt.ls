@@ -349,9 +349,10 @@ public abstract class ProjectsManager implements ISaveParticipant, IProjectsMana
 
 	@Override
 	public Job updateProject(IProject project, boolean force) {
-		if (project == null || (!ProjectUtils.isMavenProject(project) && !ProjectUtils.isGradleProject(project))) {
-			return null;
-		}
+		// Try to find any build support which will handle this project.
+		// It may be built-in maven/gradle or extended with plugins bazel support.
+		if (BuildSupportManager.instance().find(project).isEmpty()) return null;
+		
 		JavaLanguageServerPlugin.sendStatus(ServiceStatus.Message, "Updating " + project.getName() + " configuration");
 		WorkspaceJob job = new WorkspaceJob("Update project " + project.getName()) {
 
