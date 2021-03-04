@@ -35,20 +35,20 @@ public class BuildSupportManager {
 	private BuildSupportManager() {
 	}
 
-	public static BuildSupportManager instance() {
-		return instance;
-	}
-
-	public List<IBuildSupport> obtainBuildSupports() {
-		if (lazyLoadedBuildSupportList == null) {
-			lazyLoadedBuildSupportList = extractExtensions(IConstants.PLUGIN_ID, "buildSupport");
+	public static List<IBuildSupport> obtainBuildSupports() {
+		if (instance.lazyLoadedBuildSupportList == null) {
+			instance.lazyLoadedBuildSupportList = extractExtensions(IConstants.PLUGIN_ID, "buildSupport");
 		}
 
-		return lazyLoadedBuildSupportList;
+		return instance.lazyLoadedBuildSupportList;
 	}
 
-	public Optional<IBuildSupport> find(IProject project) {
-		return find(bs -> bs.applies(project));
+	public static Optional<IBuildSupport> find(IProject project) {
+		return instance.find(bs -> bs.applies(project));
+	}
+
+	public static Optional<IBuildSupport> find(String buildToolName) {
+		return instance.find(bs -> bs.buildToolName().equalsIgnoreCase(buildToolName));
 	}
 
 	/////////
